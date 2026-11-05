@@ -1,0 +1,18 @@
+# NDS Wood Library: notes for assistants
+
+- **Read first:** `..\DesignHub\docs\SUITE.md`: all seven repos, how they fit, the branches, the build, and **the
+  owner's rules** (local commits only, no installs, stay in the project folders, never click the owner's windows).
+- **Branch:** `dev/nds2018`. The other repos are on `dev/ui-pass-2`.
+- **What this is:** NDS wood design values and equations, used by `..\WoodFraming` and the Shear Wall Calculator.
+  - `NDS2018\` (namespace `NDS_WoodLibrary.NDS2018`):
+    - species and G;
+    - Table 4A / 4B reference values and size factors;
+    - Table 1B sections;
+    - adjustments: CD, Cr, CP (Eq. 3.7-1) and combined loading (Eq. 3.9-3);
+    - Table 12E bolts.
+  - The 2021 files (`NDS_2015.cs`, `MaterialProperties.cs`) still build.
+- **Code-table values live here once, and are never copied into an app.** Each value is tested against the table or a
+  hand calculation.
+- **Build:** `MSBuild NDS_WoodLibrary.sln -restore`. It is SDK-style, net472.
+- **Test:** `vstest NDS_WoodLibrary.Tests\bin\Debug\net472\NDS_WoodLibrary.Tests.dll`.
+- **The suite's TODO list** is `..\ShearWallCalculator\ROADMAP.md`.
