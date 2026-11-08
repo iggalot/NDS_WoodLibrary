@@ -10,6 +10,9 @@
     - Table 1B sections;
     - adjustments: CD, Cr, CP (Eq. 3.7-1) and combined loading (Eq. 3.9-3);
     - Table 12E bolts.
+    - Nails (`Nails`): the yield limit equations (Tables 12.3.1A and 12.3.1B), Fe (Table 12.3.3, as printed, to 50 psi), Fyb
+      (Table 12N note 2), pmin = 6D, ℓm = p − D. Tested against Table 12N as printed. The source is AWC's NDS-2018 Ch. 12 in
+      `C:\AllenEngineering\Codes\NDS 2018` (read-only; encrypted, read by rendering its pages).
   - The 2021 files (`NDS_2015.cs`, `MaterialProperties.cs`) still build.
 - **Code-table values live here once, and are never copied into an app.** Each value is tested against the table or a
   hand calculation.
