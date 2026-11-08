@@ -55,6 +55,18 @@ namespace NDS_WoodLibrary.Tests
             Assert.AreEqual(80000, Nails.BendingYield(0.192));
         }
 
+        /// <summary>Appendix Table L4, common nails, as printed: 8d 2-1/2 × 0.131, 10d 3 × 0.148, 12d 3-1/4 × 0.148, 16d 3-1/2 × 0.162, 20d 4 × 0.192.</summary>
+        [TestMethod]
+        public void TableL4_CommonNails_AsPrinted()
+        {
+            Assert.AreEqual((2.5, 0.131, 0.281), Nails.Common("8d"));
+            Assert.AreEqual((3.0, 0.148, 0.312), Nails.Common("10d"));
+            Assert.AreEqual((3.25, 0.148, 0.312), Nails.Common("12d"));
+            Assert.AreEqual((3.5, 0.162, 0.344), Nails.Common("16D"));
+            Assert.AreEqual((4.0, 0.192, 0.406), Nails.Common("20d"));
+            Assert.IsNull(Nails.Common("9d"));
+        }
+
         /// <summary>
         /// Less penetration: 6D the least (12.1.6.4: under it, no value); between 6D and 10D the equations with ℓm = p − D
         /// (12.3.5.3), never more than at 10D, and at least Table 12N's own allowance, Z × p/10D (its note 3).

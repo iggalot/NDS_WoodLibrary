@@ -16,6 +16,29 @@ namespace NDS_WoodLibrary.NDS2018
             "0.177\" < D ≤ 0.236\", 70,000 for 0.236\" < D ≤ 0.273\"); 12.1.6.4 (pmin = 6D); 12.3.5.3 (ℓm ≤ p − E/2, E = 2D for nails); " +
             "12.3.1(a): the faces of the connected members in contact.";
 
+        /// <summary>
+        /// A common steel wire nail by pennyweight ("16d"): its length L, diameter D and head H (in), NDS-2018 Appendix Table L4;
+        /// null for a size it does not list. Its tapered tip may be taken as 2D (note 2).
+        /// </summary>
+        public static (double L, double D, double H)? Common(string pennyweight)
+        {
+            switch ((pennyweight ?? "").Trim().ToLowerInvariant())
+            {
+                case "6d": return (2, 0.113, 0.266);
+                case "7d": return (2.25, 0.113, 0.266);
+                case "8d": return (2.5, 0.131, 0.281);
+                case "10d": return (3, 0.148, 0.312);
+                case "12d": return (3.25, 0.148, 0.312);
+                case "16d": return (3.5, 0.162, 0.344);
+                case "20d": return (4, 0.192, 0.406);
+                case "30d": return (4.5, 0.207, 0.438);
+                case "40d": return (5, 0.225, 0.469);
+                case "50d": return (5.5, 0.244, 0.5);
+                case "60d": return (6, 0.263, 0.531);
+                default: return null;
+            }
+        }
+
         /// <summary>Dowel bearing strength for D &lt; 1/4" (psi): Table 12.3.3 note 2, Fe = 16,600 G^1.84 (not rounded).</summary>
         public static double BearingStrength(double g) => 16600.0 * Math.Pow(g, 1.84);
 
