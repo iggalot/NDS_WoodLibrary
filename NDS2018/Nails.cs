@@ -67,5 +67,25 @@ namespace NDS_WoodLibrary.NDS2018
         }
 
         public static double? SingleShearZ(double d, double ts, double p, double gSide, double gMain) => SingleShearZ(d, ts, p, gSide, gMain, out _);
+
+        /// <summary>
+        /// Z (lb) for one nail in single shear with a gap <paramref name="gap"/> (in) between the side and main members (the
+        /// faces not in contact: NDS-2018 12.3.1(a) does not cover it), by AWC TR12's general dowel equations
+        /// (<see cref="GeneralDowel"/>): the side member <paramref name="ts"/> thick, the penetration <paramref name="p"/> into
+        /// the main member past the gap (ℓm = p − D, 12.3.5.3), Fe, Fyb and Rd as for Table 12N. Null when p is less than 6D.
+        /// With no gap it is <see cref="SingleShearZ(double, double, double, double, double)"/>.
+        /// </summary>
+        public static double? SingleShearZWithGap(double d, double ts, double gap, double p, double gSide, double gMain, out double[] modes)
+        {
+            modes = null;
+            if (p < MinPenetration(d) - 1e-9) return null;
+            double qs = TabulatedBearingStrength(gSide) * d, qm = TabulatedBearingStrength(gMain) * d;
+            double m = GeneralDowel.MomentResistance(BendingYield(d), d), rd = ReductionTerm(d);
+            modes = GeneralDowel.SingleShear(qs, qm, ts, p - d, Math.Max(0, gap), m, m, Enumerable.Repeat(rd, 6).ToArray());
+            return modes.Min();
+        }
+
+        public static double? SingleShearZWithGap(double d, double ts, double gap, double p, double gSide, double gMain) =>
+            SingleShearZWithGap(d, ts, gap, p, gSide, gMain, out _);
     }
 }
