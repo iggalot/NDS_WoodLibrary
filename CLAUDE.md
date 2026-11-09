@@ -6,8 +6,8 @@
 - **What this is:** NDS wood design values and equations, used by `..\WoodFraming` and the Shear Wall Calculator.
   - `NDS2018\` (namespace `NDS_WoodLibrary.NDS2018`):
     - species and G;
-    - Table 4A / 4B reference values and size factors, 2x4 to 2x12 (`Table4.Sizes`; Southern Pine 2x4 to 2x8 so far,
-      `SizesOf`): one set for any 2x member, studs, plates, rims, floor and ceiling joists, rafters (owner 2026-11-09);
+    - Table 4A / 4B reference values and size factors, 2x4 to 2x12 (`Table4.Sizes`, `SizesOf`; Southern Pine's
+      2x10 and 2x12 from the SFPA table kept in `docs/references`): one set for any 2x member, studs, plates, rims, floor and ceiling joists, rafters (owner 2026-11-09);
     - Table 1B sections (the same sizes);
     - adjustments: CD, Cr, CP (Eq. 3.7-1) and combined loading (Eq. 3.9-3);
     - Table 12E bolts.

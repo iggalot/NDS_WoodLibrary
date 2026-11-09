@@ -74,7 +74,16 @@ namespace NDS_WoodLibrary.Tests
             Assert.AreEqual(1.0, twelve.Fb); Assert.AreEqual(1.0, twelve.Ft); Assert.AreEqual(1.0, twelve.Fc);
             Assert.AreEqual(575, Table4.Lookup(Species.DouglasFirLarch, Grade.No2, "2x10").Ft);
             Assert.AreEqual(325, Table4.Lookup(Species.DouglasFirLarch, Grade.Stud, "2x10").Ft, "Stud 8\" and wider: No. 3's");
-            Assert.ThrowsExactly<System.ArgumentException>(() => Table4.Lookup(Species.SouthernPine, Grade.No2, "2x10"), "Table 4B's wide rows: not read in yet");
+            // Table 4B's wide rows (SFPA Use Guide 2013 Table 1, the June 1, 2013 values), typed here from the page
+            var sp10 = Table4.Lookup(Species.SouthernPine, Grade.No2, "2x10");
+            Assert.AreEqual(800, sp10.Fb); Assert.AreEqual(475, sp10.Ft); Assert.AreEqual(1300, sp10.Fc); Assert.AreEqual(1400000, sp10.E);
+            var sp12 = Table4.Lookup(Species.SouthernPine, Grade.No2, "2x12");
+            Assert.AreEqual(750, sp12.Fb); Assert.AreEqual(450, sp12.Ft); Assert.AreEqual(1250, sp12.Fc);
+            var st10 = Table4.Lookup(Species.SouthernPine, Grade.Stud, "2x10");
+            Assert.AreEqual(475, st10.Fb); Assert.AreEqual(275, st10.Ft); Assert.AreEqual(750, st10.Fc);
+            var n312 = Table4.Lookup(Species.SouthernPine, Grade.No3, "2x12");
+            Assert.AreEqual(450, n312.Fb); Assert.AreEqual(250, n312.Ft); Assert.AreEqual(725, n312.Fc); Assert.AreEqual(470000, n312.Emin);
+            Assert.AreEqual(1.0, Table4.SizeFactor(Species.SouthernPine, Grade.No2, "2x12").Ft, "size-specific: CF 1.0");
         }
 
         /// <summary>

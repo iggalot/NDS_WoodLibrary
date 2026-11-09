@@ -55,34 +55,39 @@ namespace NDS_WoodLibrary.NDS2018
                 { Grade.Stud, V(675, 350, 135, 425,  725, 1200000, 440000) } } },
         };
 
-        // Table 4B, Southern Pine: grade → nominal size → values (psi); "No. 3 and Stud" is one row
+        // Table 4B, Southern Pine: grade → nominal size → values (psi); "No. 3 and Stud" is one row. The 2x10 and 2x12 rows
+        // (2026-11-09) from SFPA's Southern Pine Use Guide 2013, Table 1 (SPIB values effective June 1, 2013, the values Table
+        // 4B gives), which matches every narrower row read here before.
         private static readonly Dictionary<Grade, Dictionary<string, ReferenceValues>> T4B = new Dictionary<Grade, Dictionary<string, ReferenceValues>>
         {
             { Grade.No2, new Dictionary<string, ReferenceValues> {
                 { "2x4", V(1100, 675, 175, 565, 1450, 1400000, 510000) },
                 { "2x6", V(1000, 600, 175, 565, 1400, 1400000, 510000) },
-                { "2x8", V( 925, 550, 175, 565, 1350, 1400000, 510000) } } },
+                { "2x8", V( 925, 550, 175, 565, 1350, 1400000, 510000) },
+                { "2x10", V(800, 475, 175, 565, 1300, 1400000, 510000) },
+                { "2x12", V(750, 450, 175, 565, 1250, 1400000, 510000) } } },
             { Grade.No3, new Dictionary<string, ReferenceValues> {
                 { "2x4", V(650, 400, 175, 565, 850, 1300000, 470000) },
                 { "2x6", V(575, 350, 175, 565, 800, 1300000, 470000) },
-                { "2x8", V(525, 325, 175, 565, 775, 1300000, 470000) } } },
+                { "2x8", V(525, 325, 175, 565, 775, 1300000, 470000) },
+                { "2x10", V(475, 275, 175, 565, 750, 1300000, 470000) },
+                { "2x12", V(450, 250, 175, 565, 725, 1300000, 470000) } } },
         };
 
         /// <summary>
         /// The nominal sizes these tables are read for, smallest first: any 2x member (studs, plates, rims, floor and ceiling
-        /// joists, rafters) takes its values here. Table 4A's species: all of them; Southern Pine (Table 4B): 2x4 to 2x8
+        /// joists, rafters) takes its values here. Table 4A's species: all of them; Southern Pine (Table 4B): 2x4 to 2x12
         /// (<see cref="SouthernPineSizes"/>).
         /// </summary>
         public static readonly string[] Sizes = { "2x4", "2x6", "2x8", "2x10", "2x12" };
-        public static readonly string[] SouthernPineSizes = { "2x4", "2x6", "2x8" };
+        public static readonly string[] SouthernPineSizes = { "2x4", "2x6", "2x8", "2x10", "2x12" };
 
         /// <summary>The sizes <paramref name="species"/> has values for here.</summary>
         public static string[] SizesOf(Species species) => species == Species.SouthernPine ? SouthernPineSizes : Sizes;
 
         /// <summary>
         /// The reference values of <paramref name="grade"/> <paramref name="species"/> in <paramref name="nominal"/> ("2x4",
-        /// "2x6", "2x8"; Table 4A's species also "2x10", "2x12", with their size factors; Southern Pine's wider rows are not
-        /// read in yet). Table 4A, Stud grade 8" and wider: "use No. 3 Grade design values and size factors" (the
+        /// "2x6", "2x8", "2x10", "2x12"; Table 4A's with their size factors, Table 4B's size-specific). Table 4A, Stud grade 8" and wider: "use No. 3 Grade design values and size factors" (the
         /// table's note on the Stud row), so a Stud 2x8 is given the No. 3 values.
         /// </summary>
         public static ReferenceValues Lookup(Species species, Grade grade, string nominal)
@@ -93,7 +98,7 @@ namespace NDS_WoodLibrary.NDS2018
             {
                 var g = grade == Grade.Stud ? Grade.No3 : grade;
                 if (!T4B[g].ContainsKey(nominal))
-                    throw new ArgumentException($"Table 4B's Southern Pine {nominal} values are not read into this library yet (2x4, 2x6, 2x8).", nameof(nominal));
+                    throw new ArgumentException($"Table 4B's Southern Pine {nominal} values are not read into this library (2x4 to 2x12).", nameof(nominal));
                 r = Copy(T4B[g][nominal]);
                 r.Source = Source4B + (grade == Grade.Stud ? " The \"No. 3 and Stud\" row." : "");
                 return r;
