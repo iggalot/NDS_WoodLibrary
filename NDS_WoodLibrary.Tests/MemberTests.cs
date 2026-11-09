@@ -61,6 +61,20 @@ namespace NDS_WoodLibrary.Tests
             Assert.AreEqual(7.5625, s.Sx, Tol);    // 1.5 × 5.5² / 6
             Assert.AreEqual(20.797, s.Ix, Tol);    // 1.5 × 5.5³ / 12
             Assert.AreEqual(13.141, Section.Of("2x8").Sx, Tol);
+            Assert.AreEqual(13.875, Section.Of("2x10").A, Tol);   // 1.5 × 9.25
+            Assert.AreEqual(16.875, Section.Of("2x12").A, Tol);   // 1.5 × 11.25
+        }
+
+        [TestMethod]
+        public void SizeFactors_TenAndTwelveWide_Table4A()
+        {
+            var ten = Table4.SizeFactor(Species.DouglasFirLarch, Grade.No2, "2x10");
+            Assert.AreEqual(1.1, ten.Fb); Assert.AreEqual(1.1, ten.Ft); Assert.AreEqual(1.0, ten.Fc);
+            var twelve = Table4.SizeFactor(Species.HemFir, Grade.No2, "2x12");
+            Assert.AreEqual(1.0, twelve.Fb); Assert.AreEqual(1.0, twelve.Ft); Assert.AreEqual(1.0, twelve.Fc);
+            Assert.AreEqual(575, Table4.Lookup(Species.DouglasFirLarch, Grade.No2, "2x10").Ft);
+            Assert.AreEqual(325, Table4.Lookup(Species.DouglasFirLarch, Grade.Stud, "2x10").Ft, "Stud 8\" and wider: No. 3's");
+            Assert.ThrowsExactly<System.ArgumentException>(() => Table4.Lookup(Species.SouthernPine, Grade.No2, "2x10"), "Table 4B's wide rows: not read in yet");
         }
 
         [TestMethod]

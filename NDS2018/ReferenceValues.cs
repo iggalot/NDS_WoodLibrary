@@ -73,7 +73,8 @@ namespace NDS_WoodLibrary.NDS2018
 
         /// <summary>
         /// The reference values of <paramref name="grade"/> <paramref name="species"/> in <paramref name="nominal"/> ("2x4",
-        /// "2x6", "2x8"). Table 4A, Stud grade 8" and wider: "use No. 3 Grade design values and size factors" (the
+        /// "2x6", "2x8"; Table 4A's species also "2x10", "2x12", with their size factors; Southern Pine's wider rows are not
+        /// read in yet). Table 4A, Stud grade 8" and wider: "use No. 3 Grade design values and size factors" (the
         /// table's note on the Stud row), so a Stud 2x8 is given the No. 3 values.
         /// </summary>
         public static ReferenceValues Lookup(Species species, Grade grade, string nominal)
@@ -83,6 +84,8 @@ namespace NDS_WoodLibrary.NDS2018
             if (species == Species.SouthernPine)
             {
                 var g = grade == Grade.Stud ? Grade.No3 : grade;
+                if (!T4B[g].ContainsKey(nominal))
+                    throw new ArgumentException($"Table 4B's Southern Pine {nominal} values are not read into this library yet (2x4, 2x6, 2x8).", nameof(nominal));
                 r = Copy(T4B[g][nominal]);
                 r.Source = Source4B + (grade == Grade.Stud ? " The \"No. 3 and Stud\" row." : "");
                 return r;
@@ -95,7 +98,7 @@ namespace NDS_WoodLibrary.NDS2018
 
         /// <summary>
         /// Table 4A size factors CF by grade and width (2" and 3" thick): No. 2 and No. 3: 2", 3", 4" wide Fb 1.5, Ft 1.5,
-        /// Fc 1.15; 6" 1.3, 1.3, 1.1; 8" 1.2, 1.2, 1.05. Stud: 2", 3", 4" 1.1, 1.1, 1.05; 5", 6" 1.0, 1.0, 1.0; 8" and
+        /// Fc 1.15; 6" 1.3, 1.3, 1.1; 8" 1.2, 1.2, 1.05; 10" 1.1, 1.1, 1.0; 12" 1.0, 1.0, 1.0. Stud: 2", 3", 4" 1.1, 1.1, 1.05; 5", 6" 1.0, 1.0, 1.0; 8" and
         /// wider: No. 3's. Southern Pine (Table 4B): 1.0 (the values are size-specific).
         /// </summary>
         public static SizeFactors SizeFactor(Species species, Grade grade, string nominal)
@@ -107,7 +110,9 @@ namespace NDS_WoodLibrary.NDS2018
             if (w <= 4) return new SizeFactors { Fb = 1.5, Ft = 1.5, Fc = 1.15 };
             if (w <= 6) return new SizeFactors { Fb = 1.3, Ft = 1.3, Fc = 1.1 };
             if (w <= 8) return new SizeFactors { Fb = 1.2, Ft = 1.2, Fc = 1.05 };
-            throw new ArgumentOutOfRangeException(nameof(nominal), "Size factors here go to 8\" wide.");
+            if (w <= 10) return new SizeFactors { Fb = 1.1, Ft = 1.1, Fc = 1.0 };
+            if (w <= 12) return new SizeFactors();
+            throw new ArgumentOutOfRangeException(nameof(nominal), "Size factors here go to 12\" wide.");
         }
 
         private static int Width(string nominal) => int.Parse(nominal.Substring(nominal.IndexOf('x') + 1));

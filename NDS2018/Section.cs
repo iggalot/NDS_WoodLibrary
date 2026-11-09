@@ -15,7 +15,7 @@ namespace NDS_WoodLibrary.NDS2018
         public double Sx => B * D * D / 6;
         public double Ix => B * D * D * D / 12;
 
-        /// <summary>2x4 1-1/2 × 3-1/2, 2x6 1-1/2 × 5-1/2, 2x8 1-1/2 × 7-1/4 (Table 1B).</summary>
+        /// <summary>2x4 1-1/2 × 3-1/2, 2x6 1-1/2 × 5-1/2, 2x8 1-1/2 × 7-1/4, 2x10 1-1/2 × 9-1/4, 2x12 1-1/2 × 11-1/4 (Table 1B).</summary>
         public static Section Of(string nominal)
         {
             switch (nominal)
@@ -23,7 +23,9 @@ namespace NDS_WoodLibrary.NDS2018
                 case "2x4": return new Section { Nominal = nominal, B = 1.5, D = 3.5 };
                 case "2x6": return new Section { Nominal = nominal, B = 1.5, D = 5.5 };
                 case "2x8": return new Section { Nominal = nominal, B = 1.5, D = 7.25 };
-                default: throw new ArgumentException($"Not a size here: \"{nominal}\" (2x4, 2x6, 2x8).", nameof(nominal));
+                case "2x10": return new Section { Nominal = nominal, B = 1.5, D = 9.25 };
+                case "2x12": return new Section { Nominal = nominal, B = 1.5, D = 11.25 };
+                default: throw new ArgumentException($"Not a size here: \"{nominal}\" (2x4, 2x6, 2x8, 2x10, 2x12).", nameof(nominal));
             }
         }
     }
