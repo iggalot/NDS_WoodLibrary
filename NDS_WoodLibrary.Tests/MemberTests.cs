@@ -77,6 +77,27 @@ namespace NDS_WoodLibrary.Tests
             Assert.ThrowsExactly<System.ArgumentException>(() => Table4.Lookup(Species.SouthernPine, Grade.No2, "2x10"), "Table 4B's wide rows: not read in yet");
         }
 
+        /// <summary>
+        /// Every size the tables hold, for any 2x member (studs, rims, joists): each has a section, values and a size factor,
+        /// No. 2 DF-L's Ft × CF by Table 4A: 2x4 1.5, 2x6 1.3, 2x8 1.2, 2x10 1.1, 2x12 1.0.
+        /// </summary>
+        [TestMethod]
+        public void EverySize_TwoByFourToTwoByTwelve_ForAnyMember()
+        {
+            CollectionAssert.AreEqual(new[] { "2x4", "2x6", "2x8", "2x10", "2x12" }, Table4.Sizes);
+            var ft = new[] { 1.5, 1.3, 1.2, 1.1, 1.0 };
+            var depth = new[] { 3.5, 5.5, 7.25, 9.25, 11.25 };
+            for (int i = 0; i < Table4.Sizes.Length; i++)
+            {
+                string n = Table4.Sizes[i];
+                Assert.AreEqual(depth[i], Section.Of(n).D, Tol, n);
+                Assert.AreEqual(ft[i], Table4.SizeFactor(Species.DouglasFirLarch, Grade.No2, n).Ft, n);
+                foreach (var sp in new[] { Species.DouglasFirLarch, Species.HemFir, Species.SprucePineFir })
+                    Assert.IsTrue(Table4.Lookup(sp, Grade.No2, n).Ft > 0, $"{sp} {n}");
+            }
+            foreach (var n in Table4.SizesOf(Species.SouthernPine)) Assert.IsTrue(Table4.Lookup(Species.SouthernPine, Grade.No2, n).Ft > 0, n);
+        }
+
         [TestMethod]
         public void LoadDuration_Table2_3_2()
         {

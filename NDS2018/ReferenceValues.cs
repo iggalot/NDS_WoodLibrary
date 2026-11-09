@@ -68,8 +68,16 @@ namespace NDS_WoodLibrary.NDS2018
                 { "2x8", V(525, 325, 175, 565, 775, 1300000, 470000) } } },
         };
 
-        /// <summary>The nominal sizes these tables are read for.</summary>
-        public static readonly string[] Sizes = { "2x4", "2x6", "2x8" };
+        /// <summary>
+        /// The nominal sizes these tables are read for, smallest first: any 2x member (studs, plates, rims, floor and ceiling
+        /// joists, rafters) takes its values here. Table 4A's species: all of them; Southern Pine (Table 4B): 2x4 to 2x8
+        /// (<see cref="SouthernPineSizes"/>).
+        /// </summary>
+        public static readonly string[] Sizes = { "2x4", "2x6", "2x8", "2x10", "2x12" };
+        public static readonly string[] SouthernPineSizes = { "2x4", "2x6", "2x8" };
+
+        /// <summary>The sizes <paramref name="species"/> has values for here.</summary>
+        public static string[] SizesOf(Species species) => species == Species.SouthernPine ? SouthernPineSizes : Sizes;
 
         /// <summary>
         /// The reference values of <paramref name="grade"/> <paramref name="species"/> in <paramref name="nominal"/> ("2x4",
